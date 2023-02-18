@@ -20,9 +20,9 @@ class Jeopardy:
         self.is_fullscreen = True
         self.questions = []
         self.answers = []
-        self.choices = []
+        self.question_buttons = [[]*5 for i in range(5)]
         self.result_label = Label()
-        self.scores = []
+        self.scores = {}
         self.names = []
         self.num_of_players = 0
         self.player_pointer = 1
@@ -36,7 +36,6 @@ class Jeopardy:
         self.player3_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
         self.player4 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
         self.player4_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
-
 
 
 
@@ -88,10 +87,13 @@ class Jeopardy:
         self.entry.destroy()
         self.get_name_button.destroy()
 
+        for name in self.names:
+            self.scores[name] = 0
+
         if self.num_of_players == 1:
             self.player1.configure(text=self.names[0] + ":")
-            self.player1.place(relx=0.5, rely=0.935, anchor="center")
-            self.player1_score.place(relx=0.5, rely=0.960, anchor="center")
+            self.player1.place(relx=0.51, rely=0.935, anchor="center")
+            self.player1_score.place(relx=0.51, rely=0.960, anchor="center")
         elif self.num_of_players == 2:
             self.player1.configure(text=self.names[0] + ":")
             self.player1.place(relx=0.3, rely=0.935, anchor="center")
@@ -128,8 +130,37 @@ class Jeopardy:
             self.player4.configure(text=self.names[3] + ":")
             self.player4.place(relx=0.8, rely=0.935, anchor="center")
             self.player4_score.place(relx=0.8, rely=0.960, anchor="center")
+        
+        for x in range(5):
+            this_x = 0.20
 
+            if x == 1:
+                this_x = 0.35
+            elif x == 2:
+                this_x = 0.50
+            elif x == 3:
+                this_x = 0.65
+            elif x == 4:
+                this_x = 0.80
+            
+            for y in range(5):
+                self.question_buttons[x].append(Button(root, text="", width=20, height=3, command=lambda x1=x, y1=y: self.question_buttons[x1][y1].destroy(), borderwidth=2, relief="groove", bg="darkblue", fg="white", font=("Helvetica", 16, "bold")))
 
+                if y == 0:
+                    self.question_buttons[x][y].configure(text="100")
+                    self.question_buttons[x][y].place(relx=this_x, rely=0.3, anchor="center")
+                elif y == 1:
+                    self.question_buttons[x][y].configure(text="200")
+                    self.question_buttons[x][y].place(relx=this_x, rely=0.4, anchor="center")
+                elif y == 2:
+                    self.question_buttons[x][y].configure(text="300")
+                    self.question_buttons[x][y].place(relx=this_x, rely=0.5, anchor="center")
+                elif y == 3:
+                    self.question_buttons[x][y].configure(text="400")
+                    self.question_buttons[x][y].place(relx=this_x, rely=0.6, anchor="center")
+                elif y == 4:
+                    self.question_buttons[x][y].configure(text="500")
+                    self.question_buttons[x][y].place(relx=this_x, rely=0.7, anchor="center")
 
 
 
@@ -171,10 +202,6 @@ class Jeopardy:
         self.enter_name_label.place(relx=0.5, rely=0.2, anchor="center")
         self.entry.focus_set()
         self.entry.place(relx=0.5, rely=0.5, anchor="center")
-
-
-
-
 
 
 jeopardy = Jeopardy()
