@@ -23,6 +23,23 @@ class Jeopardy:
         self.choices = []
         self.result_label = Label()
         self.scores = []
+        self.names = []
+        self.num_of_players = 0
+        self.player_pointer = 1
+        self.enter_name_label = Label(root, text="Enter name for Player " + str(self.player_pointer), width=60, bg="black", fg="white", font=("Helvetica", 32, "bold"))
+        self.entry = Entry(root, width=40)
+        self.player1 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
+        self.player1_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
+        self.player2 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
+        self.player2_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
+        self.player3 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
+        self.player3_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
+        self.player4 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
+        self.player4_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
+
+
+
+
 
     def buttons(self):
         quit_button = Button(root, text="Quit", command=root.destroy, width=12, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
@@ -43,23 +60,16 @@ class Jeopardy:
 
     def amount_of_players(self):
         self.player_amount_label = Label(root, text="How many players?", width=60, bg="black", fg="white", font=("Helvetica", 32, "bold"))
-        self.one_player_button = Button(root, text="One", command=self.destroy_player_select, width=12, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
-        self.two_player_button = Button(root, text="Two", command=self.destroy_player_select, width=12, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
-        self.three_player_button = Button(root, text="Three", command=self.destroy_player_select, width=12, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
-        self.four_player_button = Button(root, text="Four", command=self.destroy_player_select, width=12, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
+        self.one_player_button = Button(root, text="One", command=lambda:[self.destroy_player_select(), self.one_player()], width=12, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
+        self.two_player_button = Button(root, text="Two", command=lambda:[self.destroy_player_select(), self.two_player()], width=12, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
+        self.three_player_button = Button(root, text="Three", command=lambda:[self.destroy_player_select(), self.three_player()], width=12, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
+        self.four_player_button = Button(root, text="Four", command=lambda:[self.destroy_player_select(), self.four_player()], width=12, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
 
         self.player_amount_label.place(relx=0.5, rely=0.2, anchor="center")
         self.one_player_button.place(relx=0.2, rely=0.5, anchor="center")
         self.two_player_button.place(relx=0.4, rely=0.5, anchor="center")
         self.three_player_button.place(relx=0.6, rely=0.5, anchor="center")
         self.four_player_button.place(relx=0.8, rely=0.5, anchor="center")
-        
-        def destroy_player_select(self):
-           self.player_amount_label.destroy()
-           self.one_player_button.destroy()
-           self.two_player_button.destroy()
-           selfthree_player_button.destroy()
-           self.four_player_button.destroy()
 
     def destroy_player_select(self):
         self.player_amount_label.destroy()
@@ -68,14 +78,100 @@ class Jeopardy:
         self.three_player_button.destroy()
         self.four_player_button.destroy()
 
-#    def one_player(self):
+    def one_player(self):
+        self.num_of_players = 1
+        self.enter_name()
+        self.get_name_button()
         
+    def last(self):
+        self.enter_name_label.destroy()
+        self.entry.destroy()
+        self.get_name_button.destroy()
 
-  #  def two_player(self):
+        if self.num_of_players == 1:
+            self.player1.configure(text=self.names[0] + ":")
+            self.player1.place(relx=0.5, rely=0.935, anchor="center")
+            self.player1_score.place(relx=0.5, rely=0.960, anchor="center")
+        elif self.num_of_players == 2:
+            self.player1.configure(text=self.names[0] + ":")
+            self.player1.place(relx=0.3, rely=0.935, anchor="center")
+            self.player1_score.place(relx=0.3, rely=0.960, anchor="center")
 
- #   def three_player(self):
+            self.player2.configure(text=self.names[1] + ":")
+            self.player2.place(relx=0.7, rely=0.935, anchor="center")
+            self.player2_score.place(relx=0.7, rely=0.960, anchor="center")
+        elif self.num_of_players == 3:
+            self.player1.configure(text=self.names[0] + ":")
+            self.player1.place(relx=0.3, rely=0.935, anchor="center")
+            self.player1_score.place(relx=0.3, rely=0.960, anchor="center")
 
-#    def four_player(self):
+            self.player2.configure(text=self.names[1] + ":")
+            self.player2.place(relx=0.5, rely=0.935, anchor="center")
+            self.player2_score.place(relx=0.5, rely=0.960, anchor="center")
+
+            self.player3.configure(text=self.names[2] + ":")
+            self.player3.place(relx=0.7, rely=0.935, anchor="center")
+            self.player3_score.place(relx=0.7, rely=0.960, anchor="center")
+        else:
+            self.player1.configure(text=self.names[0] + ":")
+            self.player1.place(relx=0.2, rely=0.935, anchor="center")
+            self.player1_score.place(relx=0.2, rely=0.960, anchor="center")
+
+            self.player2.configure(text=self.names[1] + ":")
+            self.player2.place(relx=0.4, rely=0.935, anchor="center")
+            self.player2_score.place(relx=0.4, rely=0.960, anchor="center")
+
+            self.player3.configure(text=self.names[2] + ":")
+            self.player3.place(relx=0.6, rely=0.935, anchor="center")
+            self.player3_score.place(relx=0.6, rely=0.960, anchor="center")
+
+            self.player4.configure(text=self.names[3] + ":")
+            self.player4.place(relx=0.8, rely=0.935, anchor="center")
+            self.player4_score.place(relx=0.8, rely=0.960, anchor="center")
+
+
+
+
+
+    def get_names(self):
+        string = self.entry.get()
+        self.names.append(string)
+        self.entry.delete(0, END)
+
+        if self.player_pointer != self.num_of_players:
+            self.player_pointer += 1
+            self.enter_name()
+        else:
+            self.last()
+
+    def two_player(self):
+        self.num_of_players = 2
+        self.enter_name()
+        self.get_name_button()
+
+    def three_player(self):
+        self.num_of_players = 3
+        self.enter_name()
+        self.get_name_button()
+
+    def four_player(self):
+        self.num_of_players = 4
+        self.enter_name()
+        self.get_name_button()
+
+    def get_name_button(self):
+        self.get_name_button = Button(root, text="Confirm", command=self.get_names, width=12, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
+        self.get_name_button.place(relx=0.5, rely=0.8, anchor="center")
+
+
+
+
+    def enter_name(self):
+        self.enter_name_label.configure(text="Enter name for Player " + str(self.player_pointer))
+        self.enter_name_label.place(relx=0.5, rely=0.2, anchor="center")
+        self.entry.focus_set()
+        self.entry.place(relx=0.5, rely=0.5, anchor="center")
+
 
 
 
