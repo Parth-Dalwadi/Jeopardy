@@ -23,6 +23,7 @@ class Jeopardy:
         self.question_buttons = [[]*5 for i in range(5)]
         self.result_label = Label()
         self.scores = {}
+        self.score_updater = 100
         self.names = []
         self.num_of_players = 0
         self.player_pointer = 1
@@ -36,8 +37,7 @@ class Jeopardy:
         self.player3_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
         self.player4 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
         self.player4_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
-
-
+        self.question_frame = LabelFrame()
 
 
     def buttons(self):
@@ -45,7 +45,7 @@ class Jeopardy:
         quit_button.pack(side="bottom", anchor="se")
         toggle_window_button = Button(root, text="Toggle Window", command=self.is_fullscreen_command, width=12, bg="darkgreen", fg="white", font=("Helvetica", 16, "bold"))
         toggle_window_button.pack(side="bottom", anchor="se")
-        stop_music_button = Button(root, text="Stop Music", command=self.is_fullscreen_command, width=12, bg="purple", fg="white", font=("Helvetica", 16, "bold"))
+        stop_music_button = Button(root, text="Stop Music", command=lambda:[self.destroy_frame()], width=12, bg="purple", fg="white", font=("Helvetica", 16, "bold"))
         stop_music_button.pack(side="bottom", anchor="se")
         play_music_button = Button(root, text="Play Music", command=self.is_fullscreen_command, width=12, bg="gray", fg="white", font=("Helvetica", 16, "bold"))
         play_music_button.pack(side="bottom", anchor="se")
@@ -144,7 +144,7 @@ class Jeopardy:
                 this_x = 0.80
             
             for y in range(5):
-                self.question_buttons[x].append(Button(root, text="", width=20, height=3, command=lambda x1=x, y1=y: self.question_buttons[x1][y1].destroy(), borderwidth=2, relief="groove", bg="darkblue", fg="white", font=("Helvetica", 16, "bold")))
+                self.question_buttons[x].append(Button(root, text="", width=20, height=3, command=lambda x1=x, y1=y: [self.question_buttons[x1][y1].configure(text="", state = DISABLED), self.ask_question(y1)], borderwidth=2, relief="groove", bg="darkblue", fg="white", font=("Helvetica", 16, "bold")))
 
                 if y == 0:
                     self.question_buttons[x][y].configure(text="100")
@@ -194,14 +194,38 @@ class Jeopardy:
         self.get_name_button = Button(root, text="Confirm", command=self.get_names, width=12, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
         self.get_name_button.place(relx=0.5, rely=0.8, anchor="center")
 
-
-
-
     def enter_name(self):
         self.enter_name_label.configure(text="Enter name for Player " + str(self.player_pointer))
         self.enter_name_label.place(relx=0.5, rely=0.2, anchor="center")
         self.entry.focus_set()
         self.entry.place(relx=0.5, rely=0.5, anchor="center")
+
+    def ask_question(self, col):
+        if col == 0:
+            self.score_updater = 100
+        elif col == 1:
+            self.score_updater = 200
+        elif col == 2:
+            self.score_updater = 300
+        elif col == 3:
+            self.score_updater = 400
+        else:
+            self.score_updater = 500
+
+        print(self.score_updater)
+
+        self.question_frame = LabelFrame(root, width=width, height=height, bg="black", fg="white")
+        self.question_frame.pack(padx=10, pady=10)
+
+
+
+
+        
+        #self.score_updater = 100
+
+    def destroy_frame(self):
+        self.question_frame.destroy()
+    
 
 
 jeopardy = Jeopardy()
