@@ -49,7 +49,12 @@ class Jeopardy:
         self.player4 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
         self.player4_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
         self.question_frame = LabelFrame()
+        self.question_label = Label()
+        self.answer_label = Label()
         self.topic_labels = []
+        self.submit_button = Button()
+        self.return_button = Button() 
+        self.qa_dict = {}
 
 
     def buttons(self):
@@ -159,7 +164,7 @@ class Jeopardy:
             self.topic_labels[x].place(relx=this_x, rely=0.2, anchor="center")
             
             for y in range(5):
-                self.question_buttons[x].append(Button(root, text="", width=20, height=3, command=lambda x1=x, y1=y: [self.question_buttons[x1][y1].configure(text="", state = DISABLED), self.ask_question(y1)], borderwidth=2, relief="groove", bg="darkblue", fg="white", font=("Helvetica", 16, "bold")))
+                self.question_buttons[x].append(Button(root, text="", width=20, height=3, command=lambda x1=x, y1=y: [self.question_buttons[x1][y1].configure(text="", state = DISABLED), self.ask_question(x1, y1)], borderwidth=2, relief="groove", bg="darkblue", fg="white", font=("Helvetica", 16, "bold")))
 
                 if y == 0:
                     self.question_buttons[x][y].configure(text="100")
@@ -215,7 +220,7 @@ class Jeopardy:
         self.entry.focus_set()
         self.entry.place(relx=0.5, rely=0.5, anchor="center")
 
-    def ask_question(self, col):
+    def ask_question(self, row, col):
         if col == 0:
             self.score_updater = 100
         elif col == 1:
@@ -227,19 +232,34 @@ class Jeopardy:
         else:
             self.score_updater = 500
 
-        print(self.score_updater)
+        choices = list(zip(questions[row][col], answers[row][col]))
+        random.shuffle(choices)
+        question, answer = zip(*choices)
+        question = question[0]
+        answer = "What is " + answer[0] + "?"
+
 
         self.question_frame = LabelFrame(root, width=width, height=height, bg="black", fg="white")
         self.question_frame.pack(padx=10, pady=10)
 
+        self.submit_button = Button(self.question_frame, text="Reveal Answer", command=lambda:[self.reveal_answer(), self.submit_button.destroy()], width=30, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
+        self.question_label = Label(self.question_frame, text=question, width=100, wrap=1200, bg="black", fg="white", font=("Helvetica", 24, "bold"))
+        self.answer_label = Label(self.question_frame, text=answer, width=100, bg="black", fg="yellow", font=("Helvetica", 24, "bold"))
+
+        self.question_label.place(relx=0.5, rely=0.3, anchor="center")
+        self.submit_button.place(relx=0.5, rely=0.45, anchor="center")
 
 
-
-        
-        #self.score_updater = 100
+    def reveal_answer(self):
+        self.return_button = Button(self.question_frame, text="Return to Board", command=lambda:[self.destroy_frame(), self.return_button.destroy()], width=30, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
+        self.return_button.place(relx=0.5, rely=0.5, anchor="center")
+        self.answer_label.place(relx=0.5, rely=0.7, anchor="center")
 
     def destroy_frame(self):
         self.question_frame.destroy()
+        self.question_label.destroy()
+        self.answer_label.destroy()
+        self.score_updater = 100
     
 
 
