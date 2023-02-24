@@ -14,6 +14,17 @@ root.configure(background="black")
 title = Label(root, text="Pokemon Jeopardy", width=width, foreground="white", background="#e4000f", font=("Helvetica", 24, "bold"))
 title.pack(side="top")
 
+with open('jeopardyQA.json') as qa_file:
+    qa = json.load(qa_file)
+
+topics = qa['topics']
+questions = qa['questions']
+answers = qa['answers']
+zip_qa = zip(topics, questions, answers)
+list_qa = list(zip_qa)
+random.shuffle(list_qa)
+topics, questions, answers = zip(*list_qa)
+
 class Jeopardy:
     def __init__(self):
         self.buttons()
@@ -38,6 +49,7 @@ class Jeopardy:
         self.player4 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
         self.player4_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
         self.question_frame = LabelFrame()
+        self.topic_labels = []
 
 
     def buttons(self):
@@ -142,6 +154,9 @@ class Jeopardy:
                 this_x = 0.65
             elif x == 4:
                 this_x = 0.80
+
+            self.topic_labels.append(Label(root, text=topics[x], width=20, height=3, bg="black", fg="yellow", font=("Helvetica", 20, "bold")))
+            self.topic_labels[x].place(relx=this_x, rely=0.2, anchor="center")
             
             for y in range(5):
                 self.question_buttons[x].append(Button(root, text="", width=20, height=3, command=lambda x1=x, y1=y: [self.question_buttons[x1][y1].configure(text="", state = DISABLED), self.ask_question(y1)], borderwidth=2, relief="groove", bg="darkblue", fg="white", font=("Helvetica", 16, "bold")))

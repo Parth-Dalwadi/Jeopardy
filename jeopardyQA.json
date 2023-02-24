@@ -1,0 +1,137 @@
+{
+	"topics": [
+		"Pokedex Entries",
+		"Abilities",
+		"Evolutions",
+		"Lore",
+		"Mr. Rime Time"
+	],
+
+	"questions": [
+		[
+			["It has the ability to sense the Auras of all things. It understands human speech."
+			],
+		       	["It is said that it quietly spends it time deep at the bottom of the sea because its powers are too strong."
+		       	], 
+			["The spirits burned up in its ominous flame lose their way and wander this world forever."
+			], 
+			["This Pokemon is nocturnal. Even in total darkness, its large eyes can spot its prey clearly!"
+			], 
+			["This Pokemon can control 100 tons of fallen snow. It plays around innocently by leaping in and out of avalanches it has caused."
+			]
+		],
+		[
+			["There are two abilities that double your attack stat. One is Huge Power, and the other is?"
+			],
+		       	["What is the name of the ability that causes a hailstorm to occur when the Pokemon with it enters battle?"
+		       	], 
+			["What's the name of the ability that warns you if a Pokemon has a 1-hit KO or super-effective move?"
+			], 
+			["Ditto has two abilities, one of which is Imposter. What's Ditto's other ability?"
+			], 
+			["Excluding Koraidon, all ancient Paradox Pokemon have the same ability. What's the name of that ability?"
+			]
+		],
+		[
+			["What stone do you need to evolve Togetic into Togekiss?"
+			],
+		       	["In Sinnoh, where do you need to go to evolve Magneton into Magnezone?"
+		       	], 
+			["What Pokemon does Applin evolve into if you give it a Tart Apple?"
+			], 
+			["You receive an Escavalier if you trade this Pokemon for a Shelmet."
+			], 
+			["This Pokemon evolves after landing three critical hits in a single battle."
+			]
+		],
+		[
+			[	"Who is the guardian of Melemele Island in Pokemon Sun and Moon?",
+				"What's the name of the world that Giratina lives in?"
+			],
+		       	["What is the quartet of Cobalion, Terrakion, Virizion, and Keldeo known as?"
+		       	], 
+			["In Pokemon Black and White, where does N awaken Reshiram/Zekrom?"
+			], 
+			["Who is Seviper's archrival?"
+			], 
+			["What is the name of the commander that was added to Team Galactic in Pokemon Platinum?"
+			]
+		],
+		[
+			["An item of great choice and a Primal Pokemon's power."
+			],
+		       	["A being that creates energy, and an object that trades energy for strength."
+		       	], 
+			["A venomous flier who would benefit from the reduction of ice."
+			], 
+			["Kanto's fire and Johto's mountain."
+			], 
+			["One's an emperor; the other's a secret agent."
+			]
+		]
+	],
+
+	"answers": [
+		[
+			["Lucario"
+			],
+		       	["Lugia"
+		       	], 
+			["Chandelure"
+			], 
+			["Umbreon"
+			], 
+			["Chien-Pao"
+			]
+		],
+		[
+			["Pure Power"
+			],
+		       	["Snow Warning"
+		       	], 
+			["Anticipation"
+			], 
+			["Limber"
+			], 
+			["Protosynthesis"
+			]
+		],
+		[
+			["Shiny Stone"
+			],
+		       	["Mt. Coronet"
+		       	], 
+			["Flapple"
+			], 
+			["Karrablast"
+			], 
+			["Galarian Farfetch'd"
+			]
+		],
+		[
+			[	"Tapu Koko",
+				"Distortion World"
+			],
+		       	["Swords of Justice"
+		       	], 
+			["Dragonspiral Tower"
+			], 
+			["Zangoose"
+			], 
+			["Charon"
+			]
+		],
+		[
+			["Choice Band Desolate Land"
+			],
+		       	["Voltorb Life Orb"
+		       	], 
+			["Crobat Thick Fat"
+			], 
+			["Magmar Tyranitar"
+			], 
+			["Empoleon Inteleon"
+			]
+		]
+	]
+}
