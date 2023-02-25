@@ -31,7 +31,7 @@ class Jeopardy:
         self.is_fullscreen = True
         self.questions = []
         self.answers = []
-        self.question_buttons = [[]*5 for i in range(5)]
+        self.question_buttons = [[] for i in range(5)]
         self.result_label = Label()
         self.scores = {}
         self.score_updater = 100
@@ -40,14 +40,8 @@ class Jeopardy:
         self.player_pointer = 1
         self.enter_name_label = Label(root, text="Enter name for Player " + str(self.player_pointer), width=60, bg="black", fg="white", font=("Helvetica", 32, "bold"))
         self.entry = Entry(root, width=40)
-        self.player1 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
-        self.player1_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
-        self.player2 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
-        self.player2_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
-        self.player3 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
-        self.player3_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
-        self.player4 = Label(root, text="", width=20, height=5, bg="yellow", fg="black", font=("Helvetica", 16, "bold"))
-        self.player4_score = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
+        self.player_labels = {}
+        self.player_score_labels = {}
         self.question_frame = LabelFrame()
         self.question_label = Label()
         self.answer_label = Label()
@@ -55,6 +49,8 @@ class Jeopardy:
         self.submit_button = Button()
         self.return_button = Button() 
         self.qa_dict = {}
+        self.addition_buttons = []
+        self.subtraction_buttons = []
 
 
     def buttons(self):
@@ -106,47 +102,64 @@ class Jeopardy:
 
         for name in self.names:
             self.scores[name] = 0
+            self.player_labels[name] = Label(root, text=name + ":", width=20, height=5, bg="yellow", borderwidth=8, fg="black", font=("Helvetica", 16, "bold"))    
+            self.player_score_labels[name] = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
+            self.addition_buttons.append(Button(root, text="+", command=lambda name1=name:[self.add(name1)], width=1, borderwidth=2, bg="green", fg="black", font=("Helvetica", 12, "bold")))
+            self.subtraction_buttons.append(Button(root, text="-", command=lambda name1=name:[self.subtract(name1)], width=1, borderwidth=2, bg="red", fg="black", font=("Helvetica", 12, "bold")))
+           
+            diff = 0.053
 
         if self.num_of_players == 1:
-            self.player1.configure(text=self.names[0] + ":")
-            self.player1.place(relx=0.51, rely=0.935, anchor="center")
-            self.player1_score.place(relx=0.51, rely=0.960, anchor="center")
+            self.player_labels[self.names[0]].place(relx=0.51, rely=0.935, anchor="center")
+            self.player_score_labels[self.names[0]].place(relx=0.51, rely=0.960, anchor="center")
+            self.addition_buttons[0].place(relx=0.51-diff, rely=0.960, anchor="center")
+            self.subtraction_buttons[0].place(relx=0.51+diff, rely=0.960, anchor="center")
+
         elif self.num_of_players == 2:
-            self.player1.configure(text=self.names[0] + ":")
-            self.player1.place(relx=0.3, rely=0.935, anchor="center")
-            self.player1_score.place(relx=0.3, rely=0.960, anchor="center")
+            self.player_labels[self.names[0]].place(relx=0.3, rely=0.935, anchor="center")
+            self.player_score_labels[self.names[0]].place(relx=0.3, rely=0.960, anchor="center")
+            self.addition_buttons[0].place(relx=0.3-diff, rely=0.960, anchor="center")
+            self.subtraction_buttons[0].place(relx=0.3+diff, rely=0.960, anchor="center")
 
-            self.player2.configure(text=self.names[1] + ":")
-            self.player2.place(relx=0.7, rely=0.935, anchor="center")
-            self.player2_score.place(relx=0.7, rely=0.960, anchor="center")
+            self.player_labels[self.names[1]].place(relx=0.7, rely=0.935, anchor="center")
+            self.player_score_labels[self.names[1]].place(relx=0.7, rely=0.960, anchor="center")
+            self.addition_buttons[1].place(relx=0.7-diff, rely=0.960, anchor="center")
+            self.subtraction_buttons[1].place(relx=0.7+diff, rely=0.960, anchor="center")
         elif self.num_of_players == 3:
-            self.player1.configure(text=self.names[0] + ":")
-            self.player1.place(relx=0.3, rely=0.935, anchor="center")
-            self.player1_score.place(relx=0.3, rely=0.960, anchor="center")
+            self.player_labels[self.names[0]].place(relx=0.3, rely=0.935, anchor="center")
+            self.player_score_labels[self.names[0]].place(relx=0.3, rely=0.960, anchor="center")
+            self.addition_buttons[0].place(relx=0.3-diff, rely=0.960, anchor="center")
+            self.subtraction_buttons[0].place(relx=0.3+diff, rely=0.960, anchor="center")
 
-            self.player2.configure(text=self.names[1] + ":")
-            self.player2.place(relx=0.5, rely=0.935, anchor="center")
-            self.player2_score.place(relx=0.5, rely=0.960, anchor="center")
+            self.player_labels[self.names[1]].place(relx=0.5, rely=0.935, anchor="center")
+            self.player_score_labels[self.names[1]].place(relx=0.5, rely=0.960, anchor="center")
+            self.addition_buttons[1].place(relx=0.5-diff, rely=0.960, anchor="center")
+            self.subtraction_buttons[1].place(relx=0.5+diff, rely=0.960, anchor="center")
 
-            self.player3.configure(text=self.names[2] + ":")
-            self.player3.place(relx=0.7, rely=0.935, anchor="center")
-            self.player3_score.place(relx=0.7, rely=0.960, anchor="center")
+            self.player_labels[self.names[2]].place(relx=0.7, rely=0.935, anchor="center")
+            self.player_score_labels[self.names[2]].place(relx=0.7, rely=0.960, anchor="center")
+            self.addition_buttons[2].place(relx=0.7-diff, rely=0.960, anchor="center")
+            self.subtraction_buttons[2].place(relx=0.7+diff, rely=0.960, anchor="center")
         else:
-            self.player1.configure(text=self.names[0] + ":")
-            self.player1.place(relx=0.2, rely=0.935, anchor="center")
-            self.player1_score.place(relx=0.2, rely=0.960, anchor="center")
+            self.player_labels[self.names[0]].place(relx=0.2, rely=0.935, anchor="center")
+            self.player_score_labels[self.names[0]].place(relx=0.2, rely=0.960, anchor="center")
+            self.addition_buttons[0].place(relx=0.2-diff, rely=0.960, anchor="center")
+            self.subtraction_buttons[0].place(relx=0.2+diff, rely=0.960, anchor="center")
 
-            self.player2.configure(text=self.names[1] + ":")
-            self.player2.place(relx=0.4, rely=0.935, anchor="center")
-            self.player2_score.place(relx=0.4, rely=0.960, anchor="center")
+            self.player_labels[self.names[1]].place(relx=0.4, rely=0.935, anchor="center")
+            self.player_score_labels[self.names[1]].place(relx=0.4, rely=0.960, anchor="center")
+            self.addition_buttons[1].place(relx=0.4-diff, rely=0.960, anchor="center")
+            self.subtraction_buttons[1].place(relx=0.4+diff, rely=0.960, anchor="center")
 
-            self.player3.configure(text=self.names[2] + ":")
-            self.player3.place(relx=0.6, rely=0.935, anchor="center")
-            self.player3_score.place(relx=0.6, rely=0.960, anchor="center")
+            self.player_labels[self.names[2]].place(relx=0.6, rely=0.935, anchor="center")
+            self.player_score_labels[self.names[2]].place(relx=0.6, rely=0.960, anchor="center")
+            self.addition_buttons[2].place(relx=0.6-diff, rely=0.960, anchor="center")
+            self.subtraction_buttons[2].place(relx=0.6+diff, rely=0.960, anchor="center")
 
-            self.player4.configure(text=self.names[3] + ":")
-            self.player4.place(relx=0.8, rely=0.935, anchor="center")
-            self.player4_score.place(relx=0.8, rely=0.960, anchor="center")
+            self.player_labels[self.names[3]].place(relx=0.8, rely=0.935, anchor="center")
+            self.player_score_labels[self.names[3]].place(relx=0.8, rely=0.960, anchor="center")
+            self.addition_buttons[3].place(relx=0.8-diff, rely=0.960, anchor="center")
+            self.subtraction_buttons[3].place(relx=0.8+diff, rely=0.960, anchor="center")
         
         for x in range(5):
             this_x = 0.20
@@ -183,6 +196,13 @@ class Jeopardy:
                     self.question_buttons[x][y].place(relx=this_x, rely=0.7, anchor="center")
 
 
+    def add(self, name):
+        self.scores[name] += self.score_updater
+        self.player_score_labels[name].configure(text=self.scores[name])
+
+    def subtract(self, name):
+        self.scores[name] -= self.score_updater
+        self.player_score_labels[name].configure(text=self.scores[name])
 
     def get_names(self):
         string = self.entry.get()
