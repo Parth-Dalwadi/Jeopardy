@@ -25,6 +25,17 @@ list_qa = list(zip_qa)
 random.shuffle(list_qa)
 topics, questions, answers = zip(*list_qa)
 
+with open('finalJeopardy.json') as fj_file:
+    fj = json.load(fj_file)
+
+fj_topics = fj['topics']
+fj_questions = fj['questions']
+fj_answers = fj['answers']
+zip_fj = zip(fj_topics, fj_questions, fj_answers)
+list_fj = list(zip_fj)
+random.shuffle(list_fj)
+fj_topics, fj_questions, fj_answers = zip(*list_fj)
+
 class Jeopardy:
     def __init__(self):
         self.buttons()
@@ -67,7 +78,7 @@ class Jeopardy:
         self.enter_bid_label = Label()
         self.questions_left = 1
         self.final_jeopardy_button = Button()
-        self.questions_left = 25
+        #self.questions_left = 25
 
 
     def buttons(self):
@@ -371,11 +382,26 @@ class Jeopardy:
         self.score_updater = 0
         self.question_frame = LabelFrame(root, width=width, height=height, bg="black", fg="white")
         self.question_frame.pack(padx=10, pady=10)
+    
+        fj_topic = fj_topics[0]
+        fj_question = fj_questions[0]
+        fj_answer = fj_answers[0]
+        fj_choices = list(zip(fj_question, fj_answer))
+        random.shuffle(fj_choices)
+        fj_question, fj_answer = zip(*fj_choices)
+        fj_question = fj_question[0]
+        fj_answer = fj_answer[0]
+
         fj_label = Label(self.question_frame, text="Final Jeopardy", width=50, bg="black", fg="white", font=("Helvetica", 32, "bold"))
-        fj_topic_label = Label(self.question_frame, text="Topic: ", width=50, bg="black", fg="yellow", font=("Helvetica", 16, "bold"))
+        fj_topic_label = Label(self.question_frame, text="Topic: " + fj_topic, width=50, bg="black", fg="yellow", font=("Helvetica", 16, "bold"))
 
         fj_label.place(relx=0.5, rely=0.2, anchor="center")
         fj_topic_label.place(relx=0.5, rely=0.3, anchor="center")
+
+        self.enter_final_bid()
+
+    def enter_final_bid(self):
+        self.player_pointer = 1
     
 
 
