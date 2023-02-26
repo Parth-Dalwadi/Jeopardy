@@ -51,6 +51,21 @@ class Jeopardy:
         self.qa_dict = {}
         self.addition_buttons = []
         self.subtraction_buttons = []
+        #self.daily_doublex = random.randrange(0,5)
+        #self.daily_doubley = random.randrange(0,5)
+        self.daily_doublex = 0
+        self.daily_doubley = 0
+        self.question_being_asked = False
+        self.daily_double_player = ""
+        self.daily_double_frame = LabelFrame()
+        self.played_daily_double = False
+        self.picking_labels = {}
+        self.daily_double_entry = Entry()
+        self.verify_daily_double_button = Button()
+        self.daily_double_label = Label()
+        self.topic_label = Label()
+        self.enter_bid_label = Label()
+        self.questions_left = 25
 
 
     def buttons(self):
@@ -102,64 +117,56 @@ class Jeopardy:
 
         for name in self.names:
             self.scores[name] = 0
-            self.player_labels[name] = Label(root, text=name + ":", width=20, height=5, bg="yellow", borderwidth=8, fg="black", font=("Helvetica", 16, "bold"))    
-            self.player_score_labels[name] = Label(root, text=0, width=20, bg="darkgray", fg="white", font=("Helvetica", 16, "bold"))
+            self.picking_labels[name] = Label(root, text="", width=10, bg="black", fg="white", font=("Helvetica", 16, "bold"))
+            self.player_labels[name] = Label(root, text=name + ":", width=20, height=5, bg="darkblue", borderwidth=4, relief="raised", fg="white", font=("Helvetica", 16, "bold"))    
+            self.player_score_labels[name] = Label(root, text=0, width=16, bg="black", fg="white", font=("Helvetica", 16, "bold"))
             self.addition_buttons.append(Button(root, text="+", command=lambda name1=name:[self.add(name1)], width=1, borderwidth=2, bg="green", fg="black", font=("Helvetica", 12, "bold")))
             self.subtraction_buttons.append(Button(root, text="-", command=lambda name1=name:[self.subtract(name1)], width=1, borderwidth=2, bg="red", fg="black", font=("Helvetica", 12, "bold")))
-           
-            diff = 0.053
+
+        self.daily_double_player = random.choice(self.names)
+        self.player_labels[self.daily_double_player].configure(bg="yellow", fg="black")
+
+        diff = 0.05
+        labelx = 0.5
+        playery = 0.935
+        scorey = 0.965
 
         if self.num_of_players == 1:
-            self.player_labels[self.names[0]].place(relx=0.51, rely=0.935, anchor="center")
-            self.player_score_labels[self.names[0]].place(relx=0.51, rely=0.960, anchor="center")
-            self.addition_buttons[0].place(relx=0.51-diff, rely=0.960, anchor="center")
-            self.subtraction_buttons[0].place(relx=0.51+diff, rely=0.960, anchor="center")
-
+            self.picking_labels[self.names[0]].place(relx=labelx, rely=0.83, anchor="center")
+            self.player_labels[self.names[0]].place(relx=labelx, rely=playery, anchor="center")
+            self.player_score_labels[self.names[0]].place(relx=labelx, rely=scorey, anchor="center")
+            self.addition_buttons[0].place(relx=labelx-diff, rely=scorey, anchor="center")
+            self.subtraction_buttons[0].place(relx=labelx+diff, rely=scorey, anchor="center")
         elif self.num_of_players == 2:
-            self.player_labels[self.names[0]].place(relx=0.3, rely=0.935, anchor="center")
-            self.player_score_labels[self.names[0]].place(relx=0.3, rely=0.960, anchor="center")
-            self.addition_buttons[0].place(relx=0.3-diff, rely=0.960, anchor="center")
-            self.subtraction_buttons[0].place(relx=0.3+diff, rely=0.960, anchor="center")
+            labelx = 0.3
 
-            self.player_labels[self.names[1]].place(relx=0.7, rely=0.935, anchor="center")
-            self.player_score_labels[self.names[1]].place(relx=0.7, rely=0.960, anchor="center")
-            self.addition_buttons[1].place(relx=0.7-diff, rely=0.960, anchor="center")
-            self.subtraction_buttons[1].place(relx=0.7+diff, rely=0.960, anchor="center")
+            for i in range(2):
+                self.picking_labels[self.names[i]].place(relx=labelx, rely=0.83, anchor="center")
+                self.player_labels[self.names[i]].place(relx=labelx, rely=playery, anchor="center")
+                self.player_score_labels[self.names[i]].place(relx=labelx, rely=scorey, anchor="center")
+                self.addition_buttons[i].place(relx=labelx-diff, rely=scorey, anchor="center")
+                self.subtraction_buttons[i].place(relx=labelx+diff, rely=scorey, anchor="center")
+                labelx += 0.4
         elif self.num_of_players == 3:
-            self.player_labels[self.names[0]].place(relx=0.3, rely=0.935, anchor="center")
-            self.player_score_labels[self.names[0]].place(relx=0.3, rely=0.960, anchor="center")
-            self.addition_buttons[0].place(relx=0.3-diff, rely=0.960, anchor="center")
-            self.subtraction_buttons[0].place(relx=0.3+diff, rely=0.960, anchor="center")
+            labelx = 0.3
 
-            self.player_labels[self.names[1]].place(relx=0.5, rely=0.935, anchor="center")
-            self.player_score_labels[self.names[1]].place(relx=0.5, rely=0.960, anchor="center")
-            self.addition_buttons[1].place(relx=0.5-diff, rely=0.960, anchor="center")
-            self.subtraction_buttons[1].place(relx=0.5+diff, rely=0.960, anchor="center")
-
-            self.player_labels[self.names[2]].place(relx=0.7, rely=0.935, anchor="center")
-            self.player_score_labels[self.names[2]].place(relx=0.7, rely=0.960, anchor="center")
-            self.addition_buttons[2].place(relx=0.7-diff, rely=0.960, anchor="center")
-            self.subtraction_buttons[2].place(relx=0.7+diff, rely=0.960, anchor="center")
+            for i in range(3):
+                self.picking_labels[self.names[i]].place(relx=labelx, rely=0.83, anchor="center")
+                self.player_labels[self.names[i]].place(relx=labelx, rely=playery, anchor="center")
+                self.player_score_labels[self.names[i]].place(relx=labelx, rely=scorey, anchor="center")
+                self.addition_buttons[i].place(relx=labelx-diff, rely=scorey, anchor="center")
+                self.subtraction_buttons[i].place(relx=labelx+diff, rely=scorey, anchor="center")
+                labelx += 0.2
         else:
-            self.player_labels[self.names[0]].place(relx=0.2, rely=0.935, anchor="center")
-            self.player_score_labels[self.names[0]].place(relx=0.2, rely=0.960, anchor="center")
-            self.addition_buttons[0].place(relx=0.2-diff, rely=0.960, anchor="center")
-            self.subtraction_buttons[0].place(relx=0.2+diff, rely=0.960, anchor="center")
+            labelx = 0.2
 
-            self.player_labels[self.names[1]].place(relx=0.4, rely=0.935, anchor="center")
-            self.player_score_labels[self.names[1]].place(relx=0.4, rely=0.960, anchor="center")
-            self.addition_buttons[1].place(relx=0.4-diff, rely=0.960, anchor="center")
-            self.subtraction_buttons[1].place(relx=0.4+diff, rely=0.960, anchor="center")
-
-            self.player_labels[self.names[2]].place(relx=0.6, rely=0.935, anchor="center")
-            self.player_score_labels[self.names[2]].place(relx=0.6, rely=0.960, anchor="center")
-            self.addition_buttons[2].place(relx=0.6-diff, rely=0.960, anchor="center")
-            self.subtraction_buttons[2].place(relx=0.6+diff, rely=0.960, anchor="center")
-
-            self.player_labels[self.names[3]].place(relx=0.8, rely=0.935, anchor="center")
-            self.player_score_labels[self.names[3]].place(relx=0.8, rely=0.960, anchor="center")
-            self.addition_buttons[3].place(relx=0.8-diff, rely=0.960, anchor="center")
-            self.subtraction_buttons[3].place(relx=0.8+diff, rely=0.960, anchor="center")
+            for i in range(4):
+                self.picking_labels[self.names[i]].place(relx=labelx, rely=0.83, anchor="center")
+                self.player_labels[self.names[i]].place(relx=labelx, rely=playery, anchor="center")
+                self.player_score_labels[self.names[i]].place(relx=labelx, rely=scorey, anchor="center")
+                self.addition_buttons[i].place(relx=labelx-diff, rely=scorey, anchor="center")
+                self.subtraction_buttons[i].place(relx=labelx+diff, rely=scorey, anchor="center")
+                labelx += 0.2
         
         for x in range(5):
             this_x = 0.20
@@ -195,8 +202,15 @@ class Jeopardy:
                     self.question_buttons[x][y].configure(text="500")
                     self.question_buttons[x][y].place(relx=this_x, rely=0.7, anchor="center")
 
+        self.picking_labels[self.daily_double_player].configure(text="Picking")
 
     def add(self, name):
+        if self.question_being_asked == True:
+            if name != self.daily_double_player:
+                self.player_labels[self.daily_double_player].configure(bg="darkblue", fg="white")
+                self.daily_double_player = name
+                self.player_labels[self.daily_double_player].configure(bg="yellow", fg="black")
+
         self.scores[name] += self.score_updater
         self.player_score_labels[name].configure(text=self.scores[name])
 
@@ -240,7 +254,49 @@ class Jeopardy:
         self.entry.focus_set()
         self.entry.place(relx=0.5, rely=0.5, anchor="center")
 
+    def verify_bet(self):
+        bet = self.daily_double_entry.get()
+        
+        if bet.isdigit():
+            bet = int(bet)
+            if (self.scores[self.daily_double_player] > 0 and bet > 0 and bet <= self.scores[self.daily_double_player]) or (self.scores[self.daily_double_player] <= 0 and bet > 0 and bet <= self.score_updater):
+                self.score_updater = bet
+                self.verify_daily_double_button.destroy()
+                self.daily_double_label.destroy()
+                self.topic_label.destroy()
+                self.enter_bid_label.destroy()
+                self.daily_double_entry.destroy()
+                self.question_frame.pack()
+            else:
+                self.enter_bid_label.configure(text="Enter a valid bet!")
+        else:
+            self.enter_bid_label.configure(text="Enter a positive number!")
+
+    def daily_double(self, topic):
+        self.daily_double_frame = LabelFrame(root, width=width, height=height, bg="black", fg="white")
+        self.daily_double_frame.pack(padx=10, pady=10)
+        self.question_frame = LabelFrame(self.daily_double_frame, width=width, height=height, bg="black", fg="white")
+        self.daily_double_label = Label(self.daily_double_frame, text="Daily Double", width=70, wrap=1200, bg="black", fg="white", font=("Helvetica", 32, "bold"))
+        self.daily_double_label.place(relx=0.5, rely=0.2, anchor="center")
+
+        self.topic_label = Label(self.daily_double_frame, text="Topic: " + topic + " (" + str(self.score_updater) + ")", width=50, bg="black", fg="yellow", font=("Helvetica", 18, "bold"))
+        self.topic_label.place(relx=0.5, rely=0.3, anchor="center")
+        
+        self.enter_bid_label = Label(self.daily_double_frame, text=self.daily_double_player + ", enter your bid!", width=50, bg="black", fg="red", font=("Helvetica", 18, "bold"))
+        self.enter_bid_label.place(relx=0.5, rely=0.5, anchor="center")
+
+        self.daily_double_entry = Entry(self.daily_double_frame, width=40)
+        self.daily_double_entry.place(relx=0.5, rely=0.55, anchor="center")
+        self.daily_double_entry.focus_set()
+
+        self.verify_daily_double_button = Button(self.daily_double_frame, text="Verify Bet", command=lambda:[self.verify_bet()],  width=30, bg="darkblue", fg="white", font=("Helvetica", 16, "bold"))
+        self.verify_daily_double_button.place(relx=0.5, rely=0.7, anchor="center")
+
     def ask_question(self, row, col):
+        self.picking_labels[self.daily_double_player].configure(text="")
+        self.question_being_asked = True
+        self.questions_left -= 1
+
         if col == 0:
             self.score_updater = 100
         elif col == 1:
@@ -257,29 +313,46 @@ class Jeopardy:
         question, answer = zip(*choices)
         question = question[0]
         answer = "What is " + answer[0] + "?"
+        topic = topics[row]
 
+        if row == self.daily_doublex and col == self.daily_doubley:
+            self.played_daily_double = True
+            self.daily_double(topic)
+        else:   
+            self.question_frame = LabelFrame(root, width=width, height=height, bg="black", fg="white")
+            self.question_frame.pack(padx=10, pady=10)
 
-        self.question_frame = LabelFrame(root, width=width, height=height, bg="black", fg="white")
-        self.question_frame.pack(padx=10, pady=10)
-
-        self.submit_button = Button(self.question_frame, text="Reveal Answer", command=lambda:[self.reveal_answer(), self.submit_button.destroy()], width=30, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
-        self.question_label = Label(self.question_frame, text=question, width=100, wrap=1200, bg="black", fg="white", font=("Helvetica", 24, "bold"))
+        submit_button = Button(self.question_frame, text="Reveal Answer", command=lambda:[self.reveal_answer(), submit_button.destroy()], width=20, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
+        topic_label = Label(self.question_frame, text="Topic: " + topic, width=100, bg="black", fg="red", font=("Helvetica", 16, "bold"))
+        question_label = Label(self.question_frame, text=question, width=100, wrap=1200, bg="black", fg="white", font=("Helvetica", 24, "bold"))
         self.answer_label = Label(self.question_frame, text=answer, width=100, bg="black", fg="yellow", font=("Helvetica", 24, "bold"))
 
-        self.question_label.place(relx=0.5, rely=0.3, anchor="center")
-        self.submit_button.place(relx=0.5, rely=0.45, anchor="center")
+        topic_label.place(relx=0.5, rely=0.1, anchor="center")
+        question_label.place(relx=0.5, rely=0.3, anchor="center")
+        submit_button.place(relx=0.5, rely=0.5, anchor="center")
 
 
     def reveal_answer(self):
-        self.return_button = Button(self.question_frame, text="Return to Board", command=lambda:[self.destroy_frame(), self.return_button.destroy()], width=30, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
-        self.return_button.place(relx=0.5, rely=0.5, anchor="center")
+        return_button = Button(self.question_frame, text="Return to Board", command=lambda:[self.destroy_frame(), return_button.destroy()], width=20, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
+        return_button.place(relx=0.5, rely=0.95, anchor="center")
         self.answer_label.place(relx=0.5, rely=0.7, anchor="center")
 
     def destroy_frame(self):
+        self.question_being_asked = False
         self.question_frame.destroy()
-        self.question_label.destroy()
-        self.answer_label.destroy()
+
+        if self.played_daily_double == True:
+            self.daily_double_frame.destroy()
+        
         self.score_updater = 100
+        self.picking_labels[self.daily_double_player].configure(text="Picking")
+
+        if self.questions_left == 0:
+            self.picking_labels[self.daily_double_player].configure(text="")
+            self.final_jeopardy()
+
+    def final_jeopardy(self):
+        print("lol")
     
 
 
