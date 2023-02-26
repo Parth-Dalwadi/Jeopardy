@@ -352,7 +352,7 @@ class Jeopardy:
             self.final_jeopardy()
 
     def final_jeopardy(self):
-        print("lol")
+        print("hi")
     
 
 
