@@ -65,6 +65,8 @@ class Jeopardy:
         self.daily_double_label = Label()
         self.topic_label = Label()
         self.enter_bid_label = Label()
+        self.questions_left = 1
+        self.final_jeopardy_button = Button()
         self.questions_left = 25
 
 
@@ -338,6 +340,9 @@ class Jeopardy:
         self.answer_label.place(relx=0.5, rely=0.7, anchor="center")
 
     def destroy_frame(self):
+        if self.questions_left == 0:
+            self.destroy_board()
+
         self.question_being_asked = False
         self.question_frame.destroy()
 
@@ -345,14 +350,32 @@ class Jeopardy:
             self.daily_double_frame.destroy()
         
         self.score_updater = 100
-        self.picking_labels[self.daily_double_player].configure(text="Picking")
 
         if self.questions_left == 0:
-            self.picking_labels[self.daily_double_player].configure(text="")
-            self.final_jeopardy()
+            self.final_jeopardy_button = Button(root, text="Start Final Jeopardy", command=lambda:[self.final_jeopardy_button.destroy(), self.final_jeopardy()], width=30, bg="black", fg="white", font=("Helvetica", 32, "bold"))
+            self.final_jeopardy_button.place(relx=0.5, rely=0.5, anchor="center")
+            self.player_labels[self.daily_double_player].configure(bg="darkblue", fg="white")
+        else:
+            self.picking_labels[self.daily_double_player].configure(text="Picking")
+
+    def destroy_board(self):
+        for x in range(5):
+            self.topic_labels[x].destroy()
+            for y in range(5):
+                self.question_buttons[x][y].destroy()
+
+        for name in self.names:
+            self.picking_labels[name].destroy()
 
     def final_jeopardy(self):
-        print("hi")
+        self.score_updater = 0
+        self.question_frame = LabelFrame(root, width=width, height=height, bg="black", fg="white")
+        self.question_frame.pack(padx=10, pady=10)
+        fj_label = Label(self.question_frame, text="Final Jeopardy", width=50, bg="black", fg="white", font=("Helvetica", 32, "bold"))
+        fj_topic_label = Label(self.question_frame, text="Topic: ", width=50, bg="black", fg="yellow", font=("Helvetica", 16, "bold"))
+
+        fj_label.place(relx=0.5, rely=0.2, anchor="center")
+        fj_topic_label.place(relx=0.5, rely=0.3, anchor="center")
     
 
 
