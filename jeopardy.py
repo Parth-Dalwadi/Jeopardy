@@ -78,6 +78,11 @@ class Jeopardy:
         self.enter_bid_label = Label()
         self.questions_left = 1
         self.final_jeopardy_button = Button()
+        self.final_bid_label = Label()
+        self.final_bid_button = Button()
+        self.final_bid_entry = Entry()
+        self.final_jeopardy_bets = {}
+        self.zero_or_negative_label = Label()
         #self.questions_left = 25
 
 
@@ -380,6 +385,7 @@ class Jeopardy:
 
     def final_jeopardy(self):
         self.score_updater = 0
+        self.player_pointer = 1
         self.question_frame = LabelFrame(root, width=width, height=height, bg="black", fg="white")
         self.question_frame.pack(padx=10, pady=10)
     
@@ -401,8 +407,47 @@ class Jeopardy:
         self.enter_final_bid()
 
     def enter_final_bid(self):
-        self.player_pointer = 1
+        player = self.names[self.player_pointer - 1]
+
+        self.final_bid_label = Label(self.question_frame, text=player + ", enter your bid!", width=30, bg="black", fg="red", font=("Helvetica", 16, "bold")) 
+        self.final_bid_entry = Entry(self.question_frame, width=50)
+        self.final_bid_button = Button(self.question_frame, command=lambda:[self.verify_final_bid()], text="Submit Bid", width=30, bg="darkred", fg="white", font=("Helvetica", 16, "bold"))
+
+        self.final_bid_label.place(relx=0.5, rely=0.5, anchor="center")
+        self.final_bid_entry.place(relx=0.5, rely=0.6, anchor="center")
+        self.final_bid_button.place(relx=0.5, rely=0.8, anchor="center")
     
+        self.final_bid_entry.focus_set()
+
+    def verify_final_bid(self):
+        bet = self.final_bid_entry.get()
+        player = self.names[self.player_pointer - 1]
+        score = self.scores[player]
+        self.final_bid_entry.delete(0, END)
+
+        if bet.isdigit():
+            bet = int(bet)
+
+            if score > 0 and bet >= 100 and bet <= score:
+                self.final_jeopardy_bets[player] = bet
+                self.end_verify()
+            elif score <= 0:
+                must_bet = int(abs(score)/2)
+                if bet == must_bet:
+                    self.final_jeopardy_bets[player] = bet
+                    self.end_verify()
+                else:
+                    self.final_bid_label.configure(text=player + ", enter " + str(must_bet) + " to continue.")
+
+    def end_verify(self):
+        if self.player_pointer == self.num_of_players:
+            self.final_bid_label.destroy()
+            self.final_bid_entry.destroy()
+            self.final_bid_button.destroy()
+            print(self.final_jeopardy_bets)
+        else:
+            self.player_pointer += 1
+            self.final_bid_label.configure(text=self.names[self.player_pointer - 1] + ", enter your bid!")
 
 
 jeopardy = Jeopardy()
